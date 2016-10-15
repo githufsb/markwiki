@@ -87,6 +87,29 @@ class WikiPage(object):
 
         return True
 
+    def append(self, content):
+        '''Write the content. Assumes valid path. Returns success status.'''
+        # Determine if the directories are already in place.
+        directory = os.path.dirname(self.wiki_path)
+        if not os.path.exists(directory):
+            # This could be nested deeply so make all intermediate directories.
+            try:
+                os.makedirs(directory)
+            except:
+                return False
+
+        try:
+            with open(self.wiki_path, 'ab') as wiki:
+                # get rid of any Windows-like ending
+                wiki.write('\n' + content.encode('utf-8').replace('\r\n', '\n'))
+        except IOError:
+            # Something bad happened while writing so report failure.
+            return False
+        if app.config['GIT_ENABLED']:
+            app.gitint.update_file(self.rel_path)
+
+        return True
+
     def delete(self):
         try:
             os.remove(self.wiki_path)
