@@ -101,7 +101,7 @@ class WikiPage(object):
         try:
             with open(self.wiki_path, 'ab') as wiki:
                 # get rid of any Windows-like ending
-                wiki.write('\n' + content.encode('utf-8').replace('\r\n', '\n'))
+                wiki.write('\n\n' + content.encode('utf-8').replace('\r\n', '\n'))
         except IOError:
             # Something bad happened while writing so report failure.
             return False

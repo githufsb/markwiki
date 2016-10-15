@@ -173,6 +173,20 @@ def append_wiki():
 
         return redirect(url_for('wiki', page_path=page_path))
 
+@app.route('/append_links', methods=['GET'])
+@login_required
+def append_links():
+        page_path = 'Links'
+        page = WikiPage(page_path)
+        if not page.append(request.args.get('link')):
+            # Storing would fail if something unrecoverable happened.
+            abort(500)
+
+        app.search_engine.update_wiki(page_path,
+                                      request.args.get('link'))
+
+        return redirect(url_for('wiki', page_path=page_path))
+
 @app.route('/wiki/')
 @app.route('/wiki/<path:page_path>/')
 def wiki(page_path='Home'):
