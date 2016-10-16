@@ -56,6 +56,23 @@
         <li><a href='{{ url_for('wiki', page_path='MarkWiki/Help') }}'><span
           class='glyphicon glyphicon-question-sign'></span>&nbsp; Get Help</a>
         </li>
+        {% if not config['SHOWSEARCHINLINE'] %}
+        {% if not config['FREEZING'] %}
+        <li>
+      <form action='{{ url_for('search') }}' method='GET' style="width: 10em; margin: 0.5em 2em;">
+        <div class='input-group'>
+          <input type='text' name='q' class='form-control'
+            placeholder='Search...'/>
+          <span class='input-group-btn'>
+            <button type='submit' class='btn btn-info'>
+              <span class='glyphicon glyphicon-search'></span>
+            </button>
+          </span>
+        </div>
+      </form>
+    </li>
+    {% endif %}
+    {% endif %}
         {% if current_user.name == config['ADMINISTRATOR'] %}
         <li><a href='{{ url_for('administrate') }}'><span
           class='glyphicon glyphicon-lock'></span>&nbsp; Administrate</a>
@@ -83,25 +100,7 @@
 </nav>
 <div class='container'>
 <div class='row'>
-  <div class='col-lg-3'>
-    <div style='width:262px;' data-spy='affix'>
-    {% if not config['FREEZING'] %}
-      <form action='{{ url_for('search') }}' method='GET'>
-        <div class='input-group'>
-          <input type='text' name='q' class='form-control'
-            placeholder='Search...'>
-          <span class='input-group-btn'>
-            <button type='submit' class='btn btn-info'>
-              <span class='glyphicon glyphicon-search'></span>
-            </button>
-          </span>
-        </div>
-      </form>
-    {% endif %}
-      {% block actions %}{% endblock %}
-    </div>
-  </div>
-  <div class='col-lg-7'>
+  <div class='col-md-9'>
     {% with messages = get_flashed_messages(with_categories=True) %}
       {% if messages %}
         {% for category, message in messages %}
@@ -120,6 +119,26 @@
     {% endwith %}
     {% block content %}
     {% endblock %}
+  </div>
+  <div class='col-md-2'>
+    <div style='width:240px;' data-spy='affix'>
+    {% if config['SHOWSEARCHINLINE'] %}
+    {% if not config['FREEZING'] %}
+      <form action='{{ url_for('search') }}' method='GET'>
+        <div class='input-group'>
+          <input type='text' name='q' class='form-control'
+            placeholder='Search...'>
+          <span class='input-group-btn'>
+            <button type='submit' class='btn btn-info'>
+              <span class='glyphicon glyphicon-search'></span>
+            </button>
+          </span>
+        </div>
+      </form>
+    {% endif %}
+    {% endif %}
+      {% block actions %}{% endblock %}
+    </div>
   </div>
 </div>
 </div>
