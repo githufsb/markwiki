@@ -200,6 +200,29 @@ def wiki(page_path='Home'):
     else:
         return create(page_path)
 
+@app.route('/cat/')
+@app.route('/cat/<path:section_path>/')
+def cat(section_path=''):
+    '''List the contents of a directory section.'''
+    h = ''
+    rpages = []
+    if is_valid_section(section_path):
+        section = WikiSection(section_path)
+        g.sections = section.sections
+        for p in section.pages:
+          #flash(p.path)
+          #page = WikiPage(p.path)
+          rpages.append(WikiPage(p.path))
+          #h+= "<div class=col-md-3>"+page.html+"</div>"
+        return render_template('cat.html', section_path=section_path,
+                               sections=section.subsections,
+                               pages=section.pages,rpages=rpages)
+    else:
+        # This should only happen if a wiki link is created with a bad section
+        # or if someone directly tries to attempt a bad URL.
+        flash('Sorry. That wiki section doesn\'t exist.')
+        return redirect(url_for('index'))
+
 
 @app.route('/list/')
 @app.route('/list/<path:section_path>/')
