@@ -5,13 +5,19 @@ Listing of {{ section_path|default('MarkWiki Content', true) }}
 
 {% block content %}
 <ul class='breadcrumb'>
-  <li><a href='{{ url_for('list') }}'>Explore</a></li>
+  <li><a href='{{ url_for('list') }}'>Explore</a>
+    <a href='{{ url_for('cat') }}'>
+    <span class='glyphicon glyphicon-folder-open'></span></a>
+  </li>
 {% for section in g.sections %}
   {% if not loop.last %}
   <li><a href='{{ url_for('list', section_path=section.path) }}'
     >{{ section.name }}</a></li>
   {% else %}
-  <li class='active'>{{ section.name }}</li>
+  <li class='active'>{{ section.name }}
+    <a href='{{ url_for('cat', section_path=section.path) }}'>
+    <span class='glyphicon glyphicon-folder-open'></span></a>
+  </li>
   {% endif %}
 {% endfor %}
 </ul>
@@ -31,9 +37,12 @@ below.</h5>
   sections:</p>
   <ul class='list-unstyled'>
     {% for section in sections %}
-    <li><span class='glyphicon glyphicon-book'></span> <a
-        href='{{ url_for('list', section_path=section.path) }}'
-        >{{ section.name }}</a></li>
+    <li>
+      <span class='glyphicon glyphicon-book'></span> 
+      <a href='{{ url_for('list', section_path=section.path) }}'>{{ section.name }}</a>
+      <a href='{{ url_for('cat', section_path=section.path) }}'>
+        <span class='glyphicon glyphicon-folder-open'></span></a>
+    </li>
     {% endfor %}
   </ul>
   {% endif %}
